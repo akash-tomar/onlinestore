@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth import login as log
@@ -110,7 +109,8 @@ def deleteProduct(request):
 		data = request.body
 		data = json.loads(data)
 		product_name = data["product_name"]
-		prod = Product.objects.get(product_name=product_name)
+		seller_name = data["seller_name"]
+		prod = Product.objects.get(product_name=product_name,seller_name=seller_name)
 		if prod is None:
 			return JsonResponse({"success":False,"reason":"No such product exists"})
 		else:
@@ -141,8 +141,6 @@ def get_query(query_string, search_fields):
             query = query & or_query
     return query
 
-
-#,'categories__name__display',
 
 def search(request):
     keyword=request.GET['q']
@@ -193,6 +191,3 @@ def update(request):
 				prod.category.add(Tag.objects.get(name=i))
 		prod.save()
 		return JsonResponse({"success":True})
-
-
-
