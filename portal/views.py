@@ -94,7 +94,6 @@ def addProduct(request):
 			product = Product(seller=user,product_name=product_name,price=price,quantity=quantity,seller_name=seller_name)
 			product.save()
 			for i in list_category:
-				import pdb;pdb.set_trace()
 				product.category.add(i)
 			product.save()
 		except:
@@ -146,7 +145,19 @@ def search(request):
     tagval = keyword.strip()
 
     product_query = get_query(keyword.strip(), ['product_name','seller_name',])
-    posts = Product.objects.filter(product_query).distinct().order_by('id').reverse()
+    tag_query = get_query(keyword.strip(), ['name',])
+    products = Product.objects.filter(product_query).distinct().order_by('id').reverse()
 
-    import pdb; pdb.set_trace()
+    prod_list = []
+    for prod in products:
+    	prod_list.append(prod.product_name)
+
+    tags = Tag.objects.filter(tag_query).distinct().order_by('id').reverse()
+    tag_list={}
+    for tag in tags:
+    	prods = tag.products.all()
+    	tag_list[tag.name]=[]
+    	for prod  in prods:
+    		tag_list[tag.name].append(prod.product_name)
+    return JsonResponse({"products":prod_list,"tags":tag_list})
 
