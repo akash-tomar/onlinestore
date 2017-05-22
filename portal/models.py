@@ -12,15 +12,23 @@ class UserProfile(models.Model):
 	)
 	user = models.OneToOneField(User,related_name="profile_info")
 	type_of_user=models.IntegerField(choices=TYPE,default=2)
+	def __unicode__(self):
+		return str(self.user.username)
 	
 class Tag(models.Model):
 	name = models.CharField(max_length=200)
+	def __unicode__(self):
+		return str(self.name)
 
 class Product(models.Model):
 	seller = models.ForeignKey(UserProfile,related_name="product")
 	category = models.ManyToManyField(Tag,related_name='products',null=True,blank=True)
 
-	product_name = models.CharField(max_length=200,unique=True)
+	product_name = models.CharField(max_length=200)
 	price = models.IntegerField()
 	seller_name = models.CharField(max_length=200)
 	quantity = models.IntegerField(default=1)
+	class Meta:
+		unique_together = ('product_name', 'seller_name',)
+	def __unicode__(self):
+		return str(self.product_name+" by "+self.seller_name)
