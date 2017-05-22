@@ -7,3 +7,4 @@ from .models import *
 admin.site.register(UserProfile)
 admin.site.register(Tag)
 admin.site.register(Product)
+admin.site.register(AccessToken)

@@ -45,6 +45,7 @@ def signup(request):
 
 		access_token = str(uuid.uuid4().get_hex())
 		try:
+			import pdb; pdb.set_trace()
 			at = AccessToken(token_value=access_token)
 			at.save()
 			UserProfile(user=user,type_of_user=int(type_of_user),access_token=at).save()
@@ -75,8 +76,11 @@ def login(request):
 def checkToken(request):
 	if "HTTP_AUTHORIZATION" in request.META:
 		token = request.META["HTTP_AUTHORIZATION"]
-		if AccessToken.objects.exists(token_value=token):
+		try:
+			token = AccessToken.objects.get(token_value=token)
 			return True
+		except:
+			return False
 	return False
 
 @csrf_exempt
@@ -96,6 +100,8 @@ def addProduct(request):
 		for i in category:
 			Tag.objects.get_or_create(name=i)
 			list_category.append(Tag.objects.get(name=i))
+
+		token = request.META["HTTP_AUTHORIZATION"]
 		user = AccessToken.objects.get(token_value=token).profile_info
 		# try:
 		# 	user = User.objects.get(username=request.user.username).profile_info
@@ -126,7 +132,8 @@ def deleteProduct(request):
 		product_name = data["product_name"]
 		# seller_name = data["seller_name"]
 
-		seller_name = AccessToken.objects.get(token_value=token).profile_info.seller_name
+		token = request.META["HTTP_AUTHORIZATION"]
+		seller_name = AccessToken.objects.get(token_value=token).profile_info.user.username
 
 		try:
 			prod = Product.objects.get(product_name=product_name,seller_name=seller_name)
@@ -195,8 +202,9 @@ def update(request):
 
 		product_name = data["product_name"]
 
+		token = request.META["HTTP_AUTHORIZATION"]
 		user_profile = AccessToken.objects.get(token_value=token).profile_info
-		seller_name = user_profile.seller_name
+		seller_name = user_profile.user.username
 		# seller_name = request.user.username
 		# if "seller_name" in data:
 		# 	seller_name = data["seller_name"]
