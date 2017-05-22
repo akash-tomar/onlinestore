@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^deleteproduct/',deleteProduct,name='deleteproduct'),
 	url(r'^search/',search,name='search'),
 	url(r'^update/',update,name='update'),
+	url(r'^getproduct/',getProduct,name='getproduct'),
 ]
