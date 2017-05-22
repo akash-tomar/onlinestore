@@ -15,4 +15,5 @@ Steps to run this project locally:
 - Clone the project with git clone https://github.com/akash-tomar/onlinestore.git
 - cd into the project
 - For mac users: sh start.sh
+
   For linux users: ./start.sh 
