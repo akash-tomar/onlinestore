@@ -76,6 +76,11 @@ def addProduct(request):
 		product_name = data["product_name"]
 		price = data["price"]
 		quantity = data["quantity"]
+		category = data["category"]
+		list_category=[]
+		for i in category:
+			Tag.objects.get_or_create(name=i)
+			list_category.append(Tag.objects.get(name=i))
 		# seller_name = data["seller_name"]
 		user=None
 		try:
@@ -85,7 +90,12 @@ def addProduct(request):
 
 		seller_name = request.user.username
 		try:
+			print list_category
 			product = Product(seller=user,product_name=product_name,price=price,quantity=quantity,seller_name=seller_name)
+			product.save()
+			for i in list_category:
+				import pdb;pdb.set_trace()
+				product.category.add(i)
 			product.save()
 		except:
 			return JsonResponse({"success":False,"reason":"Product with this name already exists"})
