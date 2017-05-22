@@ -77,6 +77,7 @@ def addProduct(request):
 		price = data["price"]
 		quantity = data["quantity"]
 		category = data["category"]
+
 		list_category=[]
 		for i in category:
 			Tag.objects.get_or_create(name=i)
@@ -89,6 +90,9 @@ def addProduct(request):
 			return JsonResponse({"success":False,"reason":"sesssion expired. Please login again."})
 
 		seller_name = request.user.username
+		if "seller_name" in data:
+			seller_name = data["seller_name"]
+
 		try:
 			print list_category
 			product = Product(seller=user,product_name=product_name,price=price,quantity=quantity,seller_name=seller_name)
@@ -160,4 +164,35 @@ def search(request):
     	for prod  in prods:
     		tag_list[tag.name].append(prod.product_name)
     return JsonResponse({"products":prod_list,"tags":tag_list})
+
+@csrf_exempt
+def update(request):
+	if request.method=='POST':
+		data = request.body
+		data = json.loads(data)
+
+		product_name = data["product_name"]
+		seller_name = request.user.username
+		if "seller_name" in data:
+			seller_name = data["seller_name"]
+
+		prod = None
+		try:
+			prod = Product.objects.get(product_name=product_name,seller_name=seller_name)
+		except:
+			return JsonResponse({"success":False,"reason":"Invalid couple of product and seller name."})
+
+		if "price" in data:
+			prod.price=data["price"]
+		if "quantity" in data:
+			prod.quantity=data['quantity']
+		if 'category' in data:
+			prod.category.clear()
+			for i in data["category"]:
+				Tag.objects.get_or_create(name=i)
+				prod.category.add(Tag.objects.get(name=i))
+		prod.save()
+		return JsonResponse({"success":True})
+
+
 
