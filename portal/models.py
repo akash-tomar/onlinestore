@@ -4,6 +4,9 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
+class AccessToken(models.Model):
+	token_value = models.CharField(max_length=100,unique=True)
+
 class UserProfile(models.Model):
 	TYPE = (
 		(0,'Admin'),
@@ -12,6 +15,7 @@ class UserProfile(models.Model):
 	)
 	user = models.OneToOneField(User,related_name="profile_info")
 	type_of_user=models.IntegerField(choices=TYPE,default=2)
+	access_token = models.OneToOneField(AccessToken,related_name="profile_info")
 	def __unicode__(self):
 		return str(self.user.username)
 	
