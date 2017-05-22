@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^addproduct/',addProduct,name='addproduct'),
     url(r'^logout/',logout,name='logout'),
     url(r'^login/',login,name='login'),
+    url(r'^deleteproduct/',deleteProduct,name='deleteproduct'),
 ]

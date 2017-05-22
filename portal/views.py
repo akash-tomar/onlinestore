@@ -41,16 +41,34 @@ def signup(request):
 		else:
 			return HttpResponse({"success":False,"reason":"internal db error"});
 
-		try:		
+		try:        
 			UserProfile(user=user,type_of_user=int(type_of_user)).save()
 		except:
 			return JsonResponse({"success":False,"reason":"internal error"})
 		return JsonResponse({"success":True})
 	
+def logout(request):
+	loggedout(request)
+	return JsonResponse({"success":True})
+
+@csrf_exempt
+def login(request):
+	if request.method=="POST":
+		data = request.body
+		data = json.loads(data)
+		username=data["username"]
+		password=data["password"]
+		user=authenticate(username=username,password=password)
+		if user is not None:
+			if user.is_active:
+				log(request,user) #logging in the user.
+				return JsonResponse({"login":True})
+		else:
+			return JsonResponse({"login":False,"reason":"invalid credentials"})  
+
 @csrf_exempt
 def addProduct(request):
 	if request.method=='POST':
-		# import pdb; pdb.set_trace()
 		data = request.body
 		data = json.loads(data)
 		product_name = data["product_name"]
@@ -71,21 +89,17 @@ def addProduct(request):
 			return JsonResponse({"success":False,"reason":"Product with this name already exists"})
 		return JsonResponse({"success":True})
 
-
-def logout(request):
-    loggedout(request)
-    return JsonResponse({"success":True})
 @csrf_exempt
-def login(request):
-    if request.method=="POST":
-        data = request.body
-        data = json.loads(data)
-        username=data["username"]
-        password=data["password"]
-        user=authenticate(username=username,password=password)
-        if user is not None:
-            if user.is_active:
-                log(request,user) #logging in the user.
-                return JsonResponse({"login":True})
-        else:
-            return JsonResponse({"login":False,"reason":"invalid credentials"})  
+def deleteProduct(request):
+	if request.method=="DELETE":
+		# import pdb; pdb.set_trace()
+		data = request.body
+		data = json.loads(data)
+		product_name = data["product_name"]
+		prod = Products.objects.get(product_name=product_name)
+		if prod is None:
+			return JsonResponse({"success":False,"reason":"No such product exists"})
+		else:
+			prod.delete()
+			return JsonResponse({"success":True})
+
