@@ -16,7 +16,7 @@ class UserProfile(models.Model):
 class Tag(models.Model):
 	name = models.CharField(max_length=200)
 
-class Products(models.Model):
+class Product(models.Model):
 	seller = models.ForeignKey(UserProfile,related_name="product")
 	category = models.ManyToManyField(Tag,related_name='products',null=True,blank=True)
 

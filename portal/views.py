@@ -10,6 +10,8 @@ import json
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from .models import *
+import re
+from django.db.models import Q
 # Create your views here.
 @csrf_exempt
 def signup(request):
@@ -83,7 +85,7 @@ def addProduct(request):
 
 		seller_name = request.user.username
 		try:
-			product = Products(seller=user,product_name=product_name,price=price,quantity=quantity,seller_name=seller_name)
+			product = Product(seller=user,product_name=product_name,price=price,quantity=quantity,seller_name=seller_name)
 			product.save()
 		except:
 			return JsonResponse({"success":False,"reason":"Product with this name already exists"})
@@ -92,14 +94,49 @@ def addProduct(request):
 @csrf_exempt
 def deleteProduct(request):
 	if request.method=="DELETE":
-		# import pdb; pdb.set_trace()
 		data = request.body
 		data = json.loads(data)
 		product_name = data["product_name"]
-		prod = Products.objects.get(product_name=product_name)
+		prod = Product.objects.get(product_name=product_name)
 		if prod is None:
 			return JsonResponse({"success":False,"reason":"No such product exists"})
 		else:
 			prod.delete()
 			return JsonResponse({"success":True})
+
+
+def normalize_query(query_string,
+                    findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
+                    normspace=re.compile(r'\s{2,}').sub):
+
+    return [normspace(' ', (t[0] or t[1]).strip()) for t in findterms(query_string)]
+
+def get_query(query_string, search_fields):
+    query = None # Query to search for every search term
+    terms = normalize_query(query_string)
+    for term in terms:
+        or_query = None # Query to search for a given term in each field
+        for field_name in search_fields:
+            q = Q(**{"%s__icontains" % field_name: term})
+            if or_query is None:
+                or_query = q
+            else:
+                or_query = or_query | q
+        if query is None:
+            query = or_query
+        else:
+            query = query & or_query
+    return query
+
+
+#,'categories__name__display',
+
+def search(request):
+    keyword=request.GET['q']
+    tagval = keyword.strip()
+
+    product_query = get_query(keyword.strip(), ['product_name','seller_name',])
+    posts = Product.objects.filter(product_query).distinct().order_by('id').reverse()
+
+    import pdb; pdb.set_trace()
 

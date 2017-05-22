@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^logout/',logout,name='logout'),
     url(r'^login/',login,name='login'),
     url(r'^deleteproduct/',deleteProduct,name='deleteproduct'),
+	url(r'^search/',search,name='search'),
 ]
