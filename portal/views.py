@@ -45,7 +45,7 @@ def signup(request):
 
 		access_token = str(uuid.uuid4().get_hex())
 		try:
-			import pdb; pdb.set_trace()
+			# import pdb; pdb.set_trace()
 			at = AccessToken(token_value=access_token)
 			at.save()
 			UserProfile(user=user,type_of_user=int(type_of_user),access_token=at).save()
