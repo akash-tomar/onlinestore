@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.test import TestCase
 import json
+from random import randint
 # Create your tests here.
 # access_token=""
 class SignUpTest(TestCase):
@@ -75,11 +76,30 @@ class SignUpTest(TestCase):
 			login_detials = {'username': usernames[i], 'password': passwords[i]}
 			self.Test_login(login_detials)
 
-
-		# add_product = {"product_name":"prod2","price":"120","quantity":"4","category": ["akash","akash tomar"]}
-		# self.Test_add_product(add_product)
 		
-		# self.Test_search("akash")
+		products=[]
+		with open('testcases/product.txt') as file:
+			file = file.readlines()
+			for f in file:
+				products.append(f[:len(f)-1])
+
+		tags=[]
+		with open('testcases/tags.txt') as file:
+			file = file.readlines()
+			for f in file:
+				tags.append(f[:len(f)-1])
+
+		for i in products:
+			index = randint(1,10)
+			category=[]
+			for j in range(index):
+				z = randint(0,49)
+				category.append(tags[z])
+			add_product = {"product_name":i,"price":randint(100,100000),"quantity":randint(1,100),"category": category}
+			self.Test_add_product(add_product)
+		
+		for i in tags:
+			self.Test_search(i)
 
 		# update = {"product_name":"prod2","price":"120","quantity":"4866875875","category": ["akash","tomar"]}
 		# self.Test_update(update)

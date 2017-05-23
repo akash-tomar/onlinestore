@@ -111,7 +111,6 @@ def addProduct(request):
 		seller_name = user.user.username
 		
 		try:
-			print list_category
 			product = Product(seller=user,product_name=product_name,price=price,quantity=quantity,seller_name=seller_name)
 			product.save()
 			for i in list_category:
@@ -236,7 +235,6 @@ def getProduct(request):
 	if request.method=="GET":
 		product_name = request.GET.get("product_name")
 		seller_name = request.GET.get("seller_name")
-		print product_name, seller_name
 		try:
 			prod = Product.objects.get(product_name=product_name,seller_name=seller_name)
 			category_list=[]
