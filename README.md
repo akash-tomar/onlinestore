@@ -15,7 +15,7 @@ The documentation can be found here **http://docs.onlineportal.apiary.io/**
 
 ## Key Features:
 
-- Tests
+- Tested
 - Automated setup
 - Deployed code available on heroku url https://onlinestoreakash.herokuapp.com/
 
