@@ -189,7 +189,7 @@ def search(request):
 		tag_list[tag.name]=[]
 		for prod  in prods:
 			tag_list[tag.name].append(prod.product_name)
-	return JsonResponse({"products":prod_list,"tags":tag_list})
+	return JsonResponse({"success":True,"products":prod_list,"tags":tag_list})
 
 @csrf_exempt
 def update(request):
@@ -236,6 +236,7 @@ def getProduct(request):
 	if request.method=="GET":
 		product_name = request.GET.get("product_name")
 		seller_name = request.GET.get("seller_name")
+		print product_name, seller_name
 		try:
 			prod = Product.objects.get(product_name=product_name,seller_name=seller_name)
 			category_list=[]
