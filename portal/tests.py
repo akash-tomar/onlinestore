@@ -37,19 +37,52 @@ class SignUpTest(TestCase):
 
 
 	def test_A(self):
-		signup_details = {'username': 'akashtomar107', 'password': 'akashtomar',"email":"akash.tomar217@gmail.com", "confirm_password":"akashtomar", "type_of_user":"1", "first_name":"akash", "last_name":"tomar"}
-		self.Test_createAccount(signup_details)
+		usernames=[]
+		emails = []
+		first_names=[]
+		last_names=[]
+		passwords=[]
+		with open('testcases/username.txt') as file:
+			file = file.readlines()
+			for f in file:
+				usernames.append(f[:len(f)-1])
 
-		login_detials = {'username': 'akashtomar107', 'password': 'akashtomar'}
-		self.Test_login(login_detials)
+		with open('testcases/email.txt') as file:
+			file = file.readlines()
+			for f in file:
+				emails.append(f[:len(f)-1])
 
-		add_product = {"product_name":"prod2","price":"120","quantity":"4","category": ["akash","akash tomar"]}
-		self.Test_add_product(add_product)
+		with open('testcases/password.txt') as file:
+			file = file.readlines()
+			for f in file:
+				passwords.append(f[:len(f)-1])
+
+		with open('testcases/names.txt') as file:
+			file = file.readlines()
+			for f in file:
+				f = unicode(f, 'utf-8')
+				temp = f.split(' ')
+				first_names.append(temp[0])
+				last_names.append(temp[1])
+
+
+		for i in range(50):
+			signup_details = {'username': usernames[i], 'password': passwords[i],"email":emails[i], "confirm_password":passwords[i], "type_of_user":"2", "first_name":first_names[i], "last_name":last_names[i]}
+			self.Test_createAccount(signup_details)
+
+
+		for i in range(50):
+			login_detials = {'username': usernames[i], 'password': passwords[i]}
+			self.Test_login(login_detials)
+
+
+		# add_product = {"product_name":"prod2","price":"120","quantity":"4","category": ["akash","akash tomar"]}
+		# self.Test_add_product(add_product)
 		
-		self.Test_search("akash")
+		# self.Test_search("akash")
 
-		update = {"product_name":"prod2","price":"120","quantity":"4866875875","category": ["akash","tomar"]}
-		self.Test_update(update)
-		self.Test_getproduct("akashtomar107","prod2")
-		delete = {"product_name":"prod2"}
-		self.Test_delete(delete)
+		# update = {"product_name":"prod2","price":"120","quantity":"4866875875","category": ["akash","tomar"]}
+		# self.Test_update(update)
+		# self.Test_getproduct("akashtomar107","prod2")
+		# delete = {"product_name":"prod2"}
+		# self.Test_delete(delete)
