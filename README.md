@@ -6,6 +6,8 @@ Details: It supports addition, deletion, editing and searching a product. This A
 
 This has been done using Django framework in python. 
 
+Key Features:
+
 - Tests
 - Automated setup
 - Deployed code available on heroku url https://onlinestoreakash.herokuapp.com/
@@ -14,6 +16,5 @@ Steps to run this project locally:
 
 - Clone the project with **git clone https://github.com/akash-tomar/onlinestore.git**
 - **cd** into the project
-- For mac users: **sh start.sh**
-
-  For linux users: **./start.sh**
+- start your **virtualenv**
+- For mac users: **sh start.sh** & for linux users: **./start.sh**
