@@ -25,7 +25,7 @@ SECRET_KEY = 'hon!g&63_g#rs_jja6%38u-x)*$=i=zqz=l-!w-6r9=#1*)f7='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['onlinestoreakash.herokuapp.com',]
+ALLOWED_HOSTS = ['onlinestoreakash.herokuapp.com','localhost','testserver','127.0.0.1']
 
 
 # Application definition
