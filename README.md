@@ -6,6 +6,8 @@ Details: It supports addition, deletion, editing and searching a product. This A
 
 This has been done using Django framework in python. 
 
+The documentation can be found here **http://docs.onlineportal.apiary.io/**
+
 Key Features:
 
 - Tests
