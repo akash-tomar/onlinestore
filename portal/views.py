@@ -13,6 +13,10 @@ import re
 from django.db.models import Q
 import uuid
 # Create your views here.
+
+'''This function is used to signup a new user. 
+Takes necessary fields as input in post request
+and returns the access_token generated back as response.'''
 @csrf_exempt
 def signup(request):
 	if request.method=='POST':
@@ -53,10 +57,14 @@ def signup(request):
 			return JsonResponse({"success":False,"reason":"internal error"})
 		return JsonResponse({"success":True,"access_token":access_token})
 	
+'''This function is used for logging out.'''
 def logout(request):
 	loggedout(request)
 	return JsonResponse({"success":True})
 
+
+'''This function is used to get the access_token 
+using username and password'''
 @csrf_exempt
 def login(request):
 	if request.method=="POST":
@@ -73,6 +81,8 @@ def login(request):
 		else:
 			return JsonResponse({"login":False,"reason":"invalid credentials"})  
 
+
+'''This function validates the access_token sent by the user'''
 def checkToken(request):
 	if "HTTP_AUTHORIZATION" in request.META:
 		token = request.META["HTTP_AUTHORIZATION"]
@@ -83,6 +93,7 @@ def checkToken(request):
 			return False
 	return False
 
+'''This function adds the product to the associated seller account'''
 @csrf_exempt
 def addProduct(request):
 	if not checkToken(request):
@@ -120,6 +131,8 @@ def addProduct(request):
 			return JsonResponse({"success":False,"reason":"Product with this name already exists"})
 		return JsonResponse({"success":True})
 
+
+'''This function deletes the product'''
 @csrf_exempt
 def deleteProduct(request):
 	if not checkToken(request):
@@ -165,7 +178,7 @@ def get_query(query_string, search_fields):
 			query = query & or_query
 	return query
 
-
+'''This function can search the products using product name, seller name and category tags'''
 def search(request):
 	if not checkToken(request):
 		return JsonResponse({"success":False,"reason":"authentication failed"})
@@ -190,6 +203,8 @@ def search(request):
 			tag_list[tag.name].append(prod.product_name)
 	return JsonResponse({"success":True,"products":prod_list,"tags":tag_list})
 
+
+'''This function can be used to update the product details'''
 @csrf_exempt
 def update(request):
 	if not checkToken(request):
@@ -226,7 +241,7 @@ def update(request):
 		prod.save()
 		return JsonResponse({"success":True})
 
-
+'''This function can be used to view the product details'''
 @csrf_exempt
 def getProduct(request):
 	if not checkToken(request):
@@ -244,8 +259,4 @@ def getProduct(request):
 				"seller_name":prod.seller_name,"quantity":prod.quantity,"price":prod.price,"category":category_list}})
 		except:
 			return JsonResponse({"success":False,"reason":"invalid couple of product and seller name."})
-
-
-
-
 
