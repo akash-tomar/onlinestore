@@ -101,8 +101,9 @@ class SignUpTest(TestCase):
 		for i in tags:
 			self.Test_search(i)
 
-		# update = {"product_name":"prod2","price":"120","quantity":"4866875875","category": ["akash","tomar"]}
-		# self.Test_update(update)
-		# self.Test_getproduct("akashtomar107","prod2")
-		# delete = {"product_name":"prod2"}
-		# self.Test_delete(delete)
+		for i in products:
+			update = {"product_name":i,"price":"120","quantity":"4866875875","category": ["akash","tomar"]}
+			self.Test_getproduct("snarldover",i)
+			self.Test_update(update)
+			delete = {"product_name":i}
+			self.Test_delete(delete)
